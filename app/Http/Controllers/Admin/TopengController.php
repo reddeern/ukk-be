@@ -11,7 +11,8 @@ class TopengController extends Controller
 {
     public function index(Request $r)
     {
-        return Topeng::when($r->q, fn ($q, $s) => $q->where(function ($w) use ($s) {
+        return Topeng::with('videos')
+            ->when($r->q, fn ($q, $s) => $q->where(function ($w) use ($s) {
                 $w->where('topeng_nama', 'like', "%{$s}%")->orWhere('sifat_topeng', 'like', "%{$s}%");
             }))
             ->orderBy('topeng_nama')->get();

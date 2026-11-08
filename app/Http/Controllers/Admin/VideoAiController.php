@@ -26,10 +26,12 @@ class VideoAiController extends Controller
     public function store(Request $r)
     {
         $d = $r->validate([
-            'topeng_id' => 'required|exists:topeng,topeng_id',
+            'topeng_id' => 'required|exists:topeng,topeng_id|unique:video_ai,topeng_id',
             'video_judul' => 'required|string|max:150',
             'video_status' => ['sometimes', Rule::in(self::STATUS)],
             'video' => self::FILE_RULE,
+        ], [
+            'topeng_id.unique' => 'Topeng ini sudah punya video AI.',
         ]);
 
         if ($r->hasFile('video')) {
@@ -46,10 +48,15 @@ class VideoAiController extends Controller
     public function update(Request $r, VideoAi $video)
     {
         $d = $r->validate([
-            'topeng_id' => 'sometimes|required|exists:topeng,topeng_id',
+            'topeng_id' => [
+                'sometimes', 'required', 'exists:topeng,topeng_id',
+                Rule::unique('video_ai', 'topeng_id')->ignore($video->video_id, 'video_id'),
+            ],
             'video_judul' => 'sometimes|required|string|max:150',
             'video_status' => ['sometimes', Rule::in(self::STATUS)],
             'video' => self::FILE_RULE,
+        ], [
+            'topeng_id.unique' => 'Topeng ini sudah punya video AI.',
         ]);
 
         if ($r->hasFile('video')) {

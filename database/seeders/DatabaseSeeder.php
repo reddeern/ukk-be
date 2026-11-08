@@ -14,5 +14,15 @@ class DatabaseSeeder extends Seeder
             ['admin_username' => 'admin'],
             ['admin_password' => 'admin12345']
         );
+
+        $this->call([
+            PelangganSeeder::class,
+            ProdukSeeder::class,
+            TopengSeeder::class,
+            VideoAiSeeder::class,
+            KuisSeeder::class,
+            KeranjangSeeder::class,
+            PesananSeeder::class,
+        ]);
     }
 }

@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\KeranjangController;
-use App\Http\Controllers\KuisController;
 use App\Http\Controllers\PesananController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,8 +23,6 @@ Route::get('video', [CatalogController::class, 'videoIndex']);
 Route::middleware(['auth:sanctum', 'role:pelanggan'])->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
-
-    Route::post('kuis/hasil', [KuisController::class, 'hasil']);
 
     Route::get('keranjang', [KeranjangController::class, 'show']);
     Route::post('keranjang/item', [KeranjangController::class, 'tambah']);

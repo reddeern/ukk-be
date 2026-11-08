@@ -29,9 +29,12 @@ class CatalogController extends Controller
 
     public function kuisIndex()
     {
-        // topeng_id sengaja disembunyikan agar jawaban tidak "bocor" ke frontend
-        return Kuis::with('pilihan:pilihan_id,kuis_id,pilihan_jawaban')->get();
+        // topeng_id sengaja tidak dipilih agar jawaban tidak "bocor" ke frontend
+        return Kuis::select('kuis_id', 'pertanyaan_teks')
+            ->with('pilihan:pilihan_id,kuis_id,pilihan_jawaban')
+            ->get();
     }
+
 
     public function videoIndex()
     {
