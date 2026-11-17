@@ -11,57 +11,66 @@ class KuisSeeder extends Seeder
     public function run(): void
     {
         $topeng = Topeng::pluck('topeng_id', 'topeng_nama');
-        $id = fn (string $nama) => $topeng[$nama] ?? $topeng->first();
+        $id = function (string $nama) use ($topeng) {
+            $topengId = $topeng[$nama] ?? null;
+
+            if (! $topengId) {
+                throw new \RuntimeException("Topeng tidak ditemukan: {$nama}");
+            }
+
+            return $topengId;
+        };
 
         $data = [
             [
                 'Saat menghadapi masalah besar, sikapmu paling mirip...',
                 [
-                    ['Tenang dan mencari jalan keluar dengan bijak', $id('Topeng Panji')],
-                    ['Langsung maju menghadapi tantangan', $id('Topeng Bapang')],
-                    ['Berani mengambil kendali tanpa ragu', $id('Topeng Klana')],
-                    ['Mencari cara seru agar suasana tetap ringan', $id('Topeng Jaranan')],
+                    ['Tenang dan mencari jalan keluar dengan bijak', $id('Panji Asmarabangun')],
+                    ['Langsung maju menghadapi tantangan', $id('Bapang')],
+                    ['Berani mengambil kendali tanpa ragu', $id('Klana Sewandana')],
+                    ['Mencari cara seru agar suasana tetap ringan', $id('Punakawan')],
                 ],
             ],
             [
                 'Di acara kumpul keluarga, kamu biasanya...',
                 [
-                    ['Menjadi pendengar dan penengah yang tenang', $id('Topeng Panji')],
-                    ['Inisiatif mengatur dan memimpin acara', $id('Topeng Bapang')],
-                    ['Tampil percaya diri dan jadi pusat perhatian', $id('Topeng Klana')],
-                    ['Mengajak semua orang bermain dan tertawa', $id('Topeng Jaranan')],
+                    ['Menjadi pendengar dan penengah yang tenang', $id('Panji Asmarabangun')],
+                    ['Inisiatif mengatur dan memimpin acara', $id('Bapang')],
+                    ['Tampil percaya diri dan jadi pusat perhatian', $id('Klana Sewandana')],
+                    ['Mengajak semua orang bermain dan tertawa', $id('Punakawan')],
                 ],
             ],
             [
                 'Kawan menggambarkan dirimu sebagai orang yang...',
                 [
-                    ['Bijak dan bisa dipercaya', $id('Topeng Panji')],
-                    ['Pemberani dan pantang menyerah', $id('Topeng Bapang')],
-                    ['Tegas dan berwibawa', $id('Topeng Klana')],
-                    ['Ceria dan penuh energi', $id('Topeng Jaranan')],
+                    ['Bijak dan bisa dipercaya', $id('Panji Asmarabangun')],
+                    ['Pemberani dan pantang menyerah', $id('Bapang')],
+                    ['Tegas dan berwibawa', $id('Klana Sewandana')],
+                    ['Ceria dan penuh energi', $id('Punakawan')],
                 ],
             ],
             [
                 'Gaya belajarmu paling efektif saat...',
                 [
-                    ['Membaca dan merenung dengan tenang', $id('Topeng Panji')],
-                    ['Mencoba langsung dan berlatih keras', $id('Topeng Bapang')],
-                    ['Menantang diri dengan target tinggi', $id('Topeng Klana')],
-                    ['Berdiskusi sambil bersenang-senang', $id('Topeng Jaranan')],
+                    ['Membaca dan merenung dengan tenang', $id('Panji Asmarabangun')],
+                    ['Mencoba langsung dan berlatih keras', $id('Bapang')],
+                    ['Menantang diri dengan target tinggi', $id('Klana Sewandana')],
+                    ['Berdiskusi sambil bersenang-senang', $id('Punakawan')],
                 ],
             ],
         ];
 
-        foreach ($data as [$pertanyaan, $pilihan]) {
-            $kuis = Kuis::firstOrCreate(['pertanyaan_teks' => $pertanyaan]);
+        // Hapus kuis bawaan agar opsi dibuat ulang setelah data topeng diganti.
+        Kuis::whereIn('pertanyaan_teks', array_column($data, 0))->delete();
 
-            if ($kuis->wasRecentlyCreated) {
-                foreach ($pilihan as [$teks, $topengId]) {
-                    $kuis->pilihan()->create([
-                        'topeng_id' => $topengId,
-                        'pilihan_jawaban' => $teks,
-                    ]);
-                }
+        foreach ($data as [$pertanyaan, $pilihan]) {
+            $kuis = Kuis::create(['pertanyaan_teks' => $pertanyaan]);
+
+            foreach ($pilihan as [$teks, $topengId]) {
+                $kuis->pilihan()->create([
+                    'topeng_id' => $topengId,
+                    'pilihan_jawaban' => $teks,
+                ]);
             }
         }
     }
