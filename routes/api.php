@@ -17,6 +17,7 @@ Route::get('produk/{produk}', [CatalogController::class, 'produkShow']);
 Route::get('topeng', [CatalogController::class, 'topengIndex']);
 Route::get('topeng/{topeng}', [CatalogController::class, 'topengShow']);
 Route::get('kuis', [CatalogController::class, 'kuisIndex']);
+Route::post('kuis/hasil', [CatalogController::class, 'kuisHasil']);
 Route::get('video', [CatalogController::class, 'videoIndex']);
 
 // ---- Pelanggan ----

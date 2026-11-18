@@ -28,7 +28,7 @@ class KuisSeeder extends Seeder
                     ['Tenang dan mencari jalan keluar dengan bijak', $id('Panji Asmarabangun')],
                     ['Langsung maju menghadapi tantangan', $id('Bapang')],
                     ['Berani mengambil kendali tanpa ragu', $id('Klana Sewandana')],
-                    ['Mencari cara seru agar suasana tetap ringan', $id('Punakawan')],
+                    ['Mencari cara seru agar suasana tetap ringan', $id('Prasonto')],
                 ],
             ],
             [
@@ -37,7 +37,7 @@ class KuisSeeder extends Seeder
                     ['Menjadi pendengar dan penengah yang tenang', $id('Panji Asmarabangun')],
                     ['Inisiatif mengatur dan memimpin acara', $id('Bapang')],
                     ['Tampil percaya diri dan jadi pusat perhatian', $id('Klana Sewandana')],
-                    ['Mengajak semua orang bermain dan tertawa', $id('Punakawan')],
+                    ['Mengajak semua orang bermain dan tertawa', $id('Prasonto')],
                 ],
             ],
             [
@@ -46,7 +46,7 @@ class KuisSeeder extends Seeder
                     ['Bijak dan bisa dipercaya', $id('Panji Asmarabangun')],
                     ['Pemberani dan pantang menyerah', $id('Bapang')],
                     ['Tegas dan berwibawa', $id('Klana Sewandana')],
-                    ['Ceria dan penuh energi', $id('Punakawan')],
+                    ['Ceria dan penuh energi', $id('Prasonto')],
                 ],
             ],
             [
@@ -55,7 +55,7 @@ class KuisSeeder extends Seeder
                     ['Membaca dan merenung dengan tenang', $id('Panji Asmarabangun')],
                     ['Mencoba langsung dan berlatih keras', $id('Bapang')],
                     ['Menantang diri dengan target tinggi', $id('Klana Sewandana')],
-                    ['Berdiskusi sambil bersenang-senang', $id('Punakawan')],
+                    ['Berdiskusi sambil bersenang-senang', $id('Prasonto')],
                 ],
             ],
         ];

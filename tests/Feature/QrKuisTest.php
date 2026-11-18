@@ -93,6 +93,56 @@ class QrKuisTest extends TestCase
             ->assertJsonPath('0.videos.0.video_status', 'pending');
     }
 
+    public function test_kuis_hasil_memilih_topeng_dengan_suara_terbanyak(): void
+    {
+        $panji = $this->topeng('Panji Asmarabangun');
+        $bapang = $this->topeng('Bapang');
+
+        $kuis1 = Kuis::create(['pertanyaan_teks' => 'Pertanyaan 1']);
+        $a = $kuis1->pilihan()->create(['topeng_id' => $panji->topeng_id, 'pilihan_jawaban' => 'A']);
+        $b = $kuis1->pilihan()->create(['topeng_id' => $bapang->topeng_id, 'pilihan_jawaban' => 'B']);
+
+        $kuis2 = Kuis::create(['pertanyaan_teks' => 'Pertanyaan 2']);
+        $c = $kuis2->pilihan()->create(['topeng_id' => $panji->topeng_id, 'pilihan_jawaban' => 'C']);
+
+        $this->postJson('/api/kuis/hasil', [
+            'pilihan' => [$a->pilihan_id, $c->pilihan_id, $b->pilihan_id],
+        ])
+            ->assertOk()
+            ->assertJsonPath('topeng_id', $panji->topeng_id)
+            ->assertJsonPath('topeng_nama', 'Panji Asmarabangun');
+    }
+
+    public function test_kuis_hasil_tie_memakai_jawaban_pertama(): void
+    {
+        $panji = $this->topeng('Panji Asmarabangun');
+        $bapang = $this->topeng('Bapang');
+
+        $kuis = Kuis::create(['pertanyaan_teks' => 'Pertanyaan']);
+        $a = $kuis->pilihan()->create(['topeng_id' => $panji->topeng_id, 'pilihan_jawaban' => 'A']);
+        $b = $kuis->pilihan()->create(['topeng_id' => $bapang->topeng_id, 'pilihan_jawaban' => 'B']);
+
+        $this->postJson('/api/kuis/hasil', [
+            'pilihan' => [$b->pilihan_id, $a->pilihan_id],
+        ])
+            ->assertOk()
+            ->assertJsonPath('topeng_id', $bapang->topeng_id);
+    }
+
+    public function test_kuis_hasil_memetakan_kelompok_ke_karakter_tunggal(): void
+    {
+        $punakawan = $this->topeng('Punakawan');
+        $prasonto = $this->topeng('Prasonto');
+
+        $kuis = Kuis::create(['pertanyaan_teks' => 'Pertanyaan']);
+        $p = $kuis->pilihan()->create(['topeng_id' => $punakawan->topeng_id, 'pilihan_jawaban' => 'A']);
+
+        $this->postJson('/api/kuis/hasil', ['pilihan' => [$p->pilihan_id]])
+            ->assertOk()
+            ->assertJsonPath('topeng_id', $prasonto->topeng_id)
+            ->assertJsonPath('topeng_nama', 'Prasonto');
+    }
+
     public function test_video_hanya_satu_per_topeng(): void
     {
         Sanctum::actingAs(Admin::create([
